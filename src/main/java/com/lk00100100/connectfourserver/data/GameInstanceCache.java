@@ -59,25 +59,41 @@ public class GameInstanceCache {
         return gameInstanceMap.get(gameId);
     }
 
-    public static int getSeat(String gameId, String userId) {
+    /**
+     * Attempt to grab a seat.
+     *
+     * @param gameId target game id.
+     * @param userId the user
+     * @return a positive number representing the player number.
+     * -1 if you can't get a seat.
+     */
+    public static SeatTakenMessage getSeat(String gameId, String userId) {
         GameInstance game = gameInstanceMap.get(gameId);
 
         if (game == null)
-            return -1;
+            return new SeatTakenMessage(userId, -1, "Game does not exist.");
 
+        int playerNum;
         //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (game) {
-            return game.grabSeat(userId);
+            playerNum = game.grabSeat(userId);
         }
+
+        if (playerNum == -1)
+            return new SeatTakenMessage(userId, playerNum, "Game is full.");
+
+        //is ok
+        return new SeatTakenMessage(userId, playerNum, "");
     }
 
     /**
      * Returns the number of players in the target Game.
      * -1 if invalid.
+     *
      * @param gameId Target game id.
      * @return 0 or more players. -1 if invalid.
      */
-    public static int numPlayers(String gameId){
+    public static int numPlayers(String gameId) {
         GameInstance game = gameInstanceMap.get(gameId);
 
         if (game == null)

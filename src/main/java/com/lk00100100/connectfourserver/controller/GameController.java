@@ -29,7 +29,8 @@ public class GameController {
 
     @GetMapping
     @RequestMapping("/list")
-    public List<String> getGameInstanceIds() {
+    public List<String> getGameInstanceBasicList() {
+        //todo: list how full the games are.
         return GameInstanceCache.getGameInstanceIds();
     }
 

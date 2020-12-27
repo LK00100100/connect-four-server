@@ -27,9 +27,7 @@ public class WebSocketGameController {
     @MessageMapping("/game/{gameId}/seat/user/{userId}")
     @SendTo("/topic/game/{gameId}/seat")
     public SeatTakenMessage grabGameSeat(@DestinationVariable String gameId, @DestinationVariable String userId){
-        int playerNum = GameInstanceCache.getSeat(gameId, userId);
-
-        return new SeatTakenMessage(userId, playerNum);
+        return GameInstanceCache.getSeat(gameId, userId);
     }
 
     //todo: auth/z
