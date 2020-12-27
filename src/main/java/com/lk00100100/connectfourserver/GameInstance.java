@@ -18,6 +18,7 @@ public class GameInstance {
     private final int numRows = 6;
     private final int numCols = 7;
 
+    public static final int MAX_PLAYERS = 2;
     private int currentPlayer;  //todo: flip after placing piece successfully
 
     private GameState gameState;
@@ -49,6 +50,10 @@ public class GameInstance {
 
     public GameState getGameState() {
         return gameState;
+    }
+
+    public void setGameState(GameState gameState) {
+        this.gameState = gameState;
     }
 
     private void initBoard() {

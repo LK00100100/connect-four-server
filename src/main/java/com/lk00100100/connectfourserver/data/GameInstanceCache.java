@@ -33,6 +33,7 @@ public class GameInstanceCache {
     public static List<String> getGameInstanceIds() {
         synchronized (gameInstanceMap) {
             return new ArrayList<>(gameInstanceMap.keySet());
+            //todo: concurrency safe?
         }
     }
 
@@ -58,6 +59,7 @@ public class GameInstanceCache {
      */
     public static GameInstance getGameInstance(String gameId) {
         return gameInstanceMap.get(gameId);
+        //todo: concurrency safe?
     }
 
     /**
@@ -94,7 +96,7 @@ public class GameInstanceCache {
      * @param gameId Target game id.
      * @return 0 or more players. -1 if invalid.
      */
-    public static int numPlayers(String gameId) {
+    public static int getNumPlayers(String gameId) {
         GameInstance game = gameInstanceMap.get(gameId);
 
         if (game == null)
@@ -107,11 +109,53 @@ public class GameInstanceCache {
     }
 
     /**
+     * Get a target GameInstance's GameState
+     *
+     * @param gameId Target GameInstance id.
+     * @return returns the GameState or null if no instance was found.
+     */
+    public static GameState getGameState(String gameId) {
+        GameInstance game = gameInstanceMap.get(gameId);
+
+        if (game == null)
+            return null;
+
+        GameState gameState;
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        synchronized (game) {
+            gameState = game.getGameState();
+            gameState = GameState.valueOf(gameState.name());
+            //note lkeh: copy for concurrency.
+        }
+
+        return gameState;
+    }
+
+    /**
+     * Changes a target GameInstance's GameState.
+     * @param gameId   target gameId
+     * @param newState new GameState to set to
+     * @return true if changed. false otherwise (due to not found);
+     */
+    public static boolean setGameInstanceState(String gameId, GameState newState) {
+        GameInstance game = gameInstanceMap.get(gameId);
+
+        if (game == null)
+            return false;
+
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        synchronized (game) {
+            game.setGameState(newState);
+        }
+
+        return true;
+    }
+
+    /**
      * @param gameId unique game id
      * @return true if move was made. false if it was invalid.
      */
     public static boolean makeMove(String gameId, short col, int playerNum) {
-
         GameInstance game = gameInstanceMap.get(gameId);
 
         if (game == null)
@@ -122,7 +166,6 @@ public class GameInstanceCache {
             int rowPlaced = game.placePiece(col, playerNum);
             return rowPlaced != -1;
         }
-
     }
 
 }
