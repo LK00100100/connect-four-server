@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 //todo: ensure concurrency when getting and modifying the object. may need to copy
 //TODO: this will be replaced later for more machines.
+//todo: flush out old completed games.
 
 /**
  * Holds all the game instances.

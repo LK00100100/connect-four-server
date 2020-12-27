@@ -8,7 +8,6 @@ public class SeatTakenMessage {
 
     private String userId;  //the current game's id
     private int playerNum;  //the player doing the move. < 0, means no seat.
-
     private String message; //if no seat was taken, this will be filled.
 
     public SeatTakenMessage(String userId, int playerNum){
