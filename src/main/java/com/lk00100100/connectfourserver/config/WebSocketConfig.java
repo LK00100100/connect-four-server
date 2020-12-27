@@ -23,7 +23,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         //if websocket isn't available, use other available methods
         registry.addEndpoint("/con4-ws")
-                .setAllowedOrigins("http://localhost:8081", "http://127.0.0.1:8081")
+                .setAllowedOrigins("http://localhost:8081")
                 .withSockJS();
     }
 

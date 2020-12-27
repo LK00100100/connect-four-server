@@ -1,5 +1,7 @@
 package com.lk00100100.connectfourserver;
 
+import com.lk00100100.connectfourserver.data.GameState;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,8 @@ public class GameInstance {
 
     private int currentPlayer;  //todo: flip after placing piece successfully
 
+    private GameState gameState;
+
     //0th index is the 1st player id, 1st index is the 2nd player id;
     private List<String> players;
 
@@ -27,6 +31,24 @@ public class GameInstance {
         players = new ArrayList<>();
 
         this.currentPlayer = 1;
+    }
+
+    //note lkeh: these getters are so the rest api can get values and send this object.
+
+    public int[][] getBoard() {
+        return board;
+    }
+
+    public int getCurrentPlayer() {
+        return currentPlayer;
+    }
+
+    public List<String> getPlayers() {
+        return players;
+    }
+
+    public GameState getGameState() {
+        return gameState;
     }
 
     private void initBoard() {

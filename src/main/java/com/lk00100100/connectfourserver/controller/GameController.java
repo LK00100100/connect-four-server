@@ -12,7 +12,7 @@ import java.util.List;
  * REST api for downloading game meta data.
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:8081", "http://127.0.0.1:8081"})
+@CrossOrigin(origins = {"http://localhost:8081"})
 @RequestMapping("/game")  //all requests for here will be sent here
 public class GameController {
 
@@ -34,12 +34,12 @@ public class GameController {
     }
 
     @GetMapping
-    @RequestMapping("/id/{gameId}")
+    @RequestMapping("/{gameId}")
     public GameInstance getGameInstance(@PathVariable String gameId) {
         //todo: need authorization
 
         if (!GameInstanceCache.gameInstanceExists(gameId))
-            throw new GameNotFoundException("game not found");
+            throw new GameNotFoundException("Game not found");
 
         return GameInstanceCache.getGameInstance(gameId);
     }
@@ -51,7 +51,7 @@ public class GameController {
     }
 
     @PostMapping
-    @RequestMapping("/id/{gameId}/player/{playerNum}/colNum/{colNum}")
+    @RequestMapping("/{gameId}/player/{playerNum}/colNum/{colNum}")
     public boolean processMove(short playerNum, short colNum) {
         //todo: needs authorization
         //todo: maybe return an object with more details.
@@ -60,10 +60,11 @@ public class GameController {
         return false;
     }
 
-    @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "game not found")
+    @ResponseStatus(code = HttpStatus.NOT_FOUND, reason = "Game not found")
     @ExceptionHandler(GameNotFoundException.class)
     public GameNotFoundException gameWasNotFound(GameNotFoundException ex) {
         //todo: check the message
+
         return ex;
     }
 

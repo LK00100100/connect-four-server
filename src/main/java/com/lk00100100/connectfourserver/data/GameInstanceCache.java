@@ -72,6 +72,24 @@ public class GameInstanceCache {
     }
 
     /**
+     * Returns the number of players in the target Game.
+     * -1 if invalid.
+     * @param gameId Target game id.
+     * @return 0 or more players. -1 if invalid.
+     */
+    public static int numPlayers(String gameId){
+        GameInstance game = gameInstanceMap.get(gameId);
+
+        if (game == null)
+            return -1;
+
+        //noinspection SynchronizationOnLocalVariableOrMethodParameter
+        synchronized (game) {
+            return game.getPlayers().size();
+        }
+    }
+
+    /**
      * @param gameId unique game id
      * @return true if move was made. false if it was invalid.
      */
