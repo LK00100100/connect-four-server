@@ -10,13 +10,13 @@ public class SeatTakenMessage {
     private int playerNum;  //the player doing the move. < 0, means no seat.
     private String message; //if no seat was taken, this will be filled.
 
-    public SeatTakenMessage(String userId, int playerNum){
+    public SeatTakenMessage(String userId, int playerNum) {
         this.userId = userId;
         this.playerNum = playerNum;
         this.message = "";
     }
 
-    public SeatTakenMessage(String userId, int playerNum, String message){
+    public SeatTakenMessage(String userId, int playerNum, String message) {
         this(userId, playerNum);
         this.message = message;
     }

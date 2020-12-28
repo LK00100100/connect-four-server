@@ -93,14 +93,40 @@ public class GameInstance {
     }
 
     /**
-     * Drops a piece in the column.
-     * Affects the data only.
+     * Attempts to make a move if valid. It has to be playerNum's turn.
      *
-     * @param col       Target column to place piece
-     * @param playerNum The Player who is placing.
      * @return The row of the piece played. Otherwise -1;
      */
-    public int placePiece(int col, int playerNum) {
+    public int makeMove(int playerNum, int col) {
+        //not your turn!
+        if (currentPlayer != playerNum)
+            return -1;
+
+        int rowPlaced = placePiece(playerNum, col);
+
+        if (rowPlaced == -1)
+            return -1;
+
+        //flip players
+        if (this.currentPlayer == 1)
+            this.currentPlayer = 2;
+        else
+            this.currentPlayer = 1;
+
+        return rowPlaced;
+    }
+
+    /**
+     * Drops a piece in the column.
+     * Affects the data only.
+     * Returns -1 on bad move
+     *
+     * @param playerNum The Player who is placing.
+     * @param col       Target column to place piece
+     * @return The row of the piece played. Otherwise -1;
+     */
+    private int placePiece(int playerNum, int col) {
+
         boolean pieceWasPlaced = false;
         int row = 0;
 
@@ -135,7 +161,7 @@ public class GameInstance {
      * @param row the newly placed piece
      * @param col the newly placed piece
      */
-    private boolean checkVictoryQuick(int row, int col) {
+    public boolean checkVictoryQuick(int row, int col) {
         int player = this.board[row][col];
 
         if (this.checkHorizontalQuick(row, col - 3, player)) //to left
@@ -252,10 +278,12 @@ public class GameInstance {
 
     /**
      * This just checks the top row to see if the board is full.
+     * Note lkeh: Could rewrite this to just keep the count of pieces placed
+     * over time but i am lazy.
      *
      * @return true if board is full.
      */
-    private boolean isBoardFull() {
+    public boolean isBoardFull() {
         for (int col = 0; col < this.numCols; col++) {
             if (this.board[0][col] == 0)
                 return false;

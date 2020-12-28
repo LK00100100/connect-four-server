@@ -5,10 +5,16 @@ package com.lk00100100.connectfourserver.data;
  */
 public class GameMoveResult {
 
-    public String gameId;   //the current game's id
     public int playerNum;   //the player doing the move
-    public int col; //target column
+    public int col;         //target column
+    public int rowPlaced;   //the piece was placed here.
 
     public boolean wasValid;
-    public boolean isGameOver;
+    public boolean wasWinning;   //this was the winning move
+    public boolean isBoardFull;
+
+    public GameMoveResult(int playerNum, int col) {
+        this.playerNum = playerNum;
+        this.col = col;
+    }
 }

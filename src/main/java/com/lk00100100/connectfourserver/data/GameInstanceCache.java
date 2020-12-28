@@ -133,6 +133,7 @@ public class GameInstanceCache {
 
     /**
      * Changes a target GameInstance's GameState.
+     *
      * @param gameId   target gameId
      * @param newState new GameState to set to
      * @return true if changed. false otherwise (due to not found);
@@ -152,20 +153,41 @@ public class GameInstanceCache {
     }
 
     /**
+     * Returns a GameMoveResult. If valid, it makes the move.
+     * Sets result to invalid on bad or invalid move or invalid game.
+     *
      * @param gameId unique game id
      * @return true if move was made. false if it was invalid.
      */
-    public static boolean makeMove(String gameId, short col, int playerNum) {
+    public static GameMoveResult makeMove(String gameId, GameMove move) {
+        //TODO: check request order? sync'd?
         GameInstance game = gameInstanceMap.get(gameId);
 
+        GameMoveResult result = new GameMoveResult(move.playerNum, move.col);
+
         if (game == null)
-            return false;
+            return result;
+
+        int rowPlaced;
+        boolean wasVictory, isBoardFull;
 
         //noinspection SynchronizationOnLocalVariableOrMethodParameter
         synchronized (game) {
-            int rowPlaced = game.placePiece(col, playerNum);
-            return rowPlaced != -1;
+            rowPlaced = game.makeMove(move.playerNum, move.col);
+
+            if (rowPlaced == -1)
+                return result;
+
+            wasVictory = game.checkVictoryQuick(rowPlaced, move.col);
+            isBoardFull = game.isBoardFull();
         }
+
+        result.rowPlaced = rowPlaced;
+        result.wasValid = true;
+        result.wasWinning = wasVictory;
+        result.isBoardFull = isBoardFull;
+
+        return result;
     }
 
 }
