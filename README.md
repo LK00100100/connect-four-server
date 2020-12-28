@@ -7,6 +7,10 @@ work in progress
 
 use -Dspring.profiles.active=dev to use application-dev.properties
 
+The other half:
+
+https://github.com/LK00100100/connect-four-client
+
 
 # Build
 
