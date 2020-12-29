@@ -12,12 +12,13 @@ public class ConnectfourserverApplication {
 		SpringApplication.run(ConnectfourserverApplication.class, args);
 	}
 
+	//todo: did i do this right? :-/
 	@Bean
 	public WebMvcConfigurer corsConfigurer() {
 		return new WebMvcConfigurer() {
 			@Override
 			public void addCorsMappings(CorsRegistry registry) {
-				registry.addMapping("*").allowedOrigins("http://localhost:8081", "http://127.0.0.1:8081");
+				registry.addMapping("*").allowedOrigins("http://localhost:8081");
 			}
 		};
 	}

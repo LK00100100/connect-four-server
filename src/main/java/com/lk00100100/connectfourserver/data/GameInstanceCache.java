@@ -28,13 +28,30 @@ public class GameInstanceCache {
     /**
      * Returns a list of a copy of all the gameIds;
      *
-     * @return List of gameIds.
+     * @return List of GameInstanceBasicInfo.
      */
-    public static List<String> getGameInstanceIds() {
+    public static List<GameInstanceBasicInfo> getGameInstanceBasicInfoList() {
+
+        List<GameInstanceBasicInfo> infoList = new ArrayList<>();
+        //note lkeh: this can't be efficient :-/ could use r/w locks
         synchronized (gameInstanceMap) {
-            return new ArrayList<>(gameInstanceMap.keySet());
-            //todo: concurrency safe?
+            for (Map.Entry<String, GameInstance> pair : gameInstanceMap.entrySet()) {
+                String gameId = pair.getKey();
+                GameInstance game = pair.getValue();
+
+                GameInstanceBasicInfo info = new GameInstanceBasicInfo(gameId);
+
+                //noinspection SynchronizationOnLocalVariableOrMethodParameter
+                synchronized (game) {
+                    info.numPlayers = game.getPlayers().size();
+                    info.state = game.getGameState();
+                }
+
+                infoList.add(info);
+            }
         }
+
+        return infoList;
     }
 
     public static boolean gameInstanceExists(String gameId) {

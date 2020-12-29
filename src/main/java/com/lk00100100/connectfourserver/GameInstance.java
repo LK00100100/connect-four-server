@@ -32,6 +32,8 @@ public class GameInstance {
         players = new ArrayList<>();
 
         this.currentPlayer = 1;
+
+        this.gameState = GameState.WAIT;
     }
 
     //note lkeh: these getters are so the rest api can get values and send this object.

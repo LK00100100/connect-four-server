@@ -2,6 +2,7 @@ package com.lk00100100.connectfourserver.controller;
 
 import com.lk00100100.connectfourserver.GameInstance;
 import com.lk00100100.connectfourserver.GameNotFoundException;
+import com.lk00100100.connectfourserver.data.GameInstanceBasicInfo;
 import com.lk00100100.connectfourserver.data.GameInstanceCache;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +13,7 @@ import java.util.List;
  * REST api for downloading game meta data.
  */
 @RestController
-@CrossOrigin(origins = {"http://localhost:8081"})
+@CrossOrigin(origins = {"http://localhost:8081"})   //todo: make global
 @RequestMapping("/game")  //all requests for here will be sent here
 public class GameController {
 
@@ -29,9 +30,8 @@ public class GameController {
 
     @GetMapping
     @RequestMapping("/list")
-    public List<String> getGameInstanceBasicList() {
-        //todo: list how full the games are.
-        return GameInstanceCache.getGameInstanceIds();
+    public List<GameInstanceBasicInfo> getGameInstanceBasicList() {
+        return GameInstanceCache.getGameInstanceBasicInfoList();
     }
 
     @GetMapping
